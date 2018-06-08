@@ -49,7 +49,7 @@ function generateReturnParcels(profile, partnerConfig) {
             }
         }
     }
-
+    console.log(returnParcels);
     return returnParcels;
 }
 
@@ -83,6 +83,9 @@ describe('generateRequestObj', function () {
     /* -------- IF SRA, generate a single request for each parcel -------- */
     if (partnerProfile.architecture) {
         requestObject = partnerModule.generateRequestObj(returnParcels);
+
+      console.log("###################");
+      console.log(requestObject.data.imps);
 
         /* Simple type checking, should always pass */
         it('SRA - should return a correctly formatted object', function () {

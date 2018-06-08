@@ -20,6 +20,7 @@
     "chai-spies": "^0.7.1",
     "jasmine": "^2.6.0",
     "jsonfile": "^4.0.0",
+    "npm": "^6.1.0",
     "parse-json": "^4.0.0",
     "path": "^0.12.7",
     "proxyquire": "^1.8.0",

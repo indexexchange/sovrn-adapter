@@ -49,6 +49,124 @@ function SovrnHtb(configs) {
      * Data
      * ---------------------------------- */
 
+  /**
+   * Generates the request URL and query data to the endpoint for the xSlots
+   * in the given returnParcels.
+   *
+   * @param  {object[]} returnParcels
+   *
+   * @return {object}
+   */
+  function __generateRequestObj(returnParcels) {
+
+    /* =============================================================================
+     * STEP 2  | Generate Request URL
+     * -----------------------------------------------------------------------------
+     *
+     * Generate the URL to request demand from the partner endpoint using the provided
+     * returnParcels. The returnParcels is an array of objects each object containing
+     * an .xSlotRef which is a reference to the xSlot object from the partner configuration.
+     * Use this to retrieve the placements/xSlots you need to request for.
+     *
+     * If your partner is MRA, returnParcels will be an array of length one. If your
+     * partner is SRA, it will contain any number of entities. In any event, the full
+     * contents of the array should be able to fit into a single request and the
+     * return value of this function should similarly represent a single request to the
+     * endpoint.
+     *
+     * Return an object containing:
+     * queryUrl: the url for the request
+     * data: the query object containing a map of the query string paramaters
+     *
+     * callbackId:
+     *
+     * arbitrary id to match the request with the response in the callback function. If
+     * your endpoint supports passing in an arbitrary ID and returning it as part of the response
+     * please use the callbackType: Partner.CallbackTypes.ID and fill out the adResponseCallback.
+     *
+     * adResponseCallback -> parse response in this
+     *
+     * Also please provide this adResponseCallback to your bid request here so that the JSONP
+     * response calls it once it has completed.
+     *
+     * If your endpoint does not support passing in an ID, simply use
+     * Partner.CallbackTypes.CALLBACK_NAME and the wrapper will take care of handling request
+     * matching by generating unique callbacks for each request using the callbackId.
+     *
+     * If your endpoint is ajax only, please set the appropriate values in your profile for this,
+     * i.e. Partner.CallbackTypes.NONE and Partner.Requesttypes.AJAX. You also do not need to provide
+     * a callbackId in this case because there is no callback.
+     *
+     * The return object should look something like this:
+     * {
+     *     url: 'http://bidserver.com/api/bids' // base request url for a GET/POST request
+     *     data: { // query string object that will be attached to the base url
+     *        slots: [
+     *             {
+     *                 placementId: 54321,
+     *                 sizes: [[300, 250]]
+     *             },{
+     *                 placementId: 12345,
+     *                 sizes: [[300, 600]]
+     *             },{
+     *                 placementId: 654321,
+     *                 sizes: [[728, 90]]
+     *             }
+     *         ],
+     *         site: 'http://google.com'
+     *     },
+     *     callbackId: '_23sd2ij4i1' //unique id used for pairing requests and responses
+     * }
+     */
+
+    /* ---------------------- PUT CODE HERE ------------------------------------ */
+    var callbackId = System.generateUniqueId();
+
+    /* Change this to your bidder endpoint.*/
+    var baseUrl = Browser.getProtocol() + '//ap.lijit.com/rtb/bid?src=prebid_prebid_0.31.0';
+
+
+
+    /* ---------------- Craft bid request using the above returnParcels --------- */
+
+    var queryObj = {
+      id: returnParcels[0].xSlotRef.placementId,
+      site: {
+        domain: Browser.getReferrer,
+        page: Browser.getPageUrl()
+      }
+    };
+
+    const imps = returnParcels.map(parcel => {
+      const tagId = parcel.xSlotRef.placementId;
+      const refId = parcel.ref;
+      return parcel.xSlotRef.sizes.map(size => {
+        const w = size[0];
+        const h = size[1];
+        return {
+          id: refId,
+          banner: {
+            w: w,
+            h: h
+          },
+          tagid: tagId,
+          bidfloor: ""
+        }
+      })
+    }).reduce((prev, curr) => { return prev.concat(curr); });
+
+    queryObj.imps = imps;
+
+
+    /* -------------------------------------------------------------------------- */
+
+    return {
+      url: baseUrl,
+      data: queryObj,
+      callbackId: callbackId
+    };
+  }
+
     /* Private
      * ---------------------------------- */
 
@@ -72,92 +190,6 @@ function SovrnHtb(configs) {
 
     /* Utilities
      * ---------------------------------- */
-
-    /**
-     * Generates the request URL and query data to the endpoint for the xSlots
-     * in the given returnParcels.
-     *
-     * @param  {object[]} returnParcels
-     *
-     * @return {object}
-     */
-    function __generateRequestObj(returnParcels) {
-
-        /* =============================================================================
-         * STEP 2  | Generate Request URL
-         * -----------------------------------------------------------------------------
-         *
-         * Generate the URL to request demand from the partner endpoint using the provided
-         * returnParcels. The returnParcels is an array of objects each object containing
-         * an .xSlotRef which is a reference to the xSlot object from the partner configuration.
-         * Use this to retrieve the placements/xSlots you need to request for.
-         *
-         * If your partner is MRA, returnParcels will be an array of length one. If your
-         * partner is SRA, it will contain any number of entities. In any event, the full
-         * contents of the array should be able to fit into a single request and the
-         * return value of this function should similarly represent a single request to the
-         * endpoint.
-         *
-         * Return an object containing:
-         * queryUrl: the url for the request
-         * data: the query object containing a map of the query string paramaters
-         *
-         * callbackId:
-         *
-         * arbitrary id to match the request with the response in the callback function. If
-         * your endpoint supports passing in an arbitrary ID and returning it as part of the response
-         * please use the callbackType: Partner.CallbackTypes.ID and fill out the adResponseCallback.
-         * Also please provide this adResponseCallback to your bid request here so that the JSONP
-         * response calls it once it has completed.
-         *
-         * If your endpoint does not support passing in an ID, simply use
-         * Partner.CallbackTypes.CALLBACK_NAME and the wrapper will take care of handling request
-         * matching by generating unique callbacks for each request using the callbackId.
-         *
-         * If your endpoint is ajax only, please set the appropriate values in your profile for this,
-         * i.e. Partner.CallbackTypes.NONE and Partner.Requesttypes.AJAX. You also do not need to provide
-         * a callbackId in this case because there is no callback.
-         *
-         * The return object should look something like this:
-         * {
-         *     url: 'http://bidserver.com/api/bids' // base request url for a GET/POST request
-         *     data: { // query string object that will be attached to the base url
-         *        slots: [
-         *             {
-         *                 placementId: 54321,
-         *                 sizes: [[300, 250]]
-         *             },{
-         *                 placementId: 12345,
-         *                 sizes: [[300, 600]]
-         *             },{
-         *                 placementId: 654321,
-         *                 sizes: [[728, 90]]
-         *             }
-         *         ],
-         *         site: 'http://google.com'
-         *     },
-         *     callbackId: '_23sd2ij4i1' //unique id used for pairing requests and responses
-         * }
-         */
-
-        /* ---------------------- PUT CODE HERE ------------------------------------ */
-        var queryObj = {};
-        var callbackId = System.generateUniqueId();
-
-        /* Change this to your bidder endpoint.*/
-        var baseUrl = Browser.getProtocol() + '//someAdapterEndpoint.com/bid';
-
-        /* ---------------- Craft bid request using the above returnParcels --------- */
-
-
-        /* -------------------------------------------------------------------------- */
-
-        return {
-            url: baseUrl,
-            data: queryObj,
-            callbackId: callbackId
-        };
-    }
 
     /* =============================================================================
      * STEP 3  | Response callback
