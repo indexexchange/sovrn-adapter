@@ -157,7 +157,6 @@ function SovrnHtb(configs) {
 
     var source = "indexAdapter"
     var callbackFunc = __parseFuncPath
-
     var queryObj = {
       callback: callbackFunc,
       src: source,
@@ -193,13 +192,11 @@ function SovrnHtb(configs) {
 
     queryObj.br = br;
 
-
     if(ComplianceService.isPrivacyEnabled()) {
       var gdprStatus = ComplianceService.gdpr.getConsent();
       queryObj.gdpr = gdprStatus.applies ? 1 : 0;
       queryObj.gdpr_consent = gdprStatus.consentString;
     }
-
 
     /* -------------------------------------------------------------------------- */
 

@@ -112,7 +112,24 @@ var libraryStubData = {
                 registerAd: function () {
                     return '_' + Math.random().toString(36).substr(2, 9);
                 }
+            },
+          ComplianceService: {
+            isPrivacyEnabled: function () {
+              return Math.random() >= 0.5;
+            },
+            gdpr: {
+              getConsent: function () {
+                return {
+                  applies: function () {
+                    return Math.random() >= 0.5;
+                  },
+                  consentString: function () {
+                    return 'BOQ7WlgOQ7WlgABABwAAABJOACgACAAQABA';
+                  }
+                }
+              }
             }
+          }
         },
     },
     'system.js': {
