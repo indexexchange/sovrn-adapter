@@ -27,6 +27,8 @@ var Network = require('network.js');
 var Utilities = require('utilities.js');
 var EventsService;
 var RenderService;
+var ComplianceService;
+
 
 //? if (DEBUG) {
 var ConfigValidators = require('config-validators.js');
@@ -123,14 +125,46 @@ function SovrnHtb(configs) {
     var callbackId = System.generateUniqueId();
 
     /* Change this to your bidder endpoint.*/
-    var baseUrl = Browser.getProtocol() + '//ap.lijit.com/rtb/bid?src=prebid_prebid_0.31.0';
+    var baseUrl = Browser.getProtocol() + '//ap.lijit.com/rtb/bid';
 
 
 
     /* ---------------- Craft bid request using the above returnParcels --------- */
 
+    // queryObj: {
+    //   callback: headertag.SovrnHtb.sovrnResponse,
+    //   src: indexAdapter,
+    //   br: {
+    //     "id": "8134ce8c09affbf",
+    //         "imp": [
+    //       {
+    //         "id": "58893ab15f05ef1",
+    //         "banner": {
+    //           "w": 970,
+    //           "h": 66
+    //         },
+    //         "tagid": "395468",
+    //         "bidfloor": ""
+    //       }
+    //     ],
+    //         "site": {
+    //       "domain": "thechive.com",
+    //           "page": "/"
+    //     }
+    //   }
+    // }
+
+
+    var source = "indexAdapter"
+    var callbackFunc = __parseFuncPath
+
     var queryObj = {
-      id: returnParcels[0].xSlotRef.placementId,
+      callback: callbackFunc,
+      src: source,
+    }
+
+    var br = {
+      id: callbackId,
       site: {
         domain: Browser.getReferrer,
         page: Browser.getPageUrl()
@@ -155,7 +189,16 @@ function SovrnHtb(configs) {
       })
     }).reduce((prev, curr) => { return prev.concat(curr); });
 
-    queryObj.imps = imps;
+    br.imps = imps;
+
+    queryObj.br = br;
+
+
+    if(ComplianceService.isPrivacyEnabled()) {
+      var gdprStatus = ComplianceService.gdpr.getConsent();
+      queryObj.gdpr = gdprStatus.applies ? 1 : 0;
+      queryObj.gdpr_consent = gdprStatus.consentString;
+    }
 
 
     /* -------------------------------------------------------------------------- */
@@ -177,7 +220,9 @@ function SovrnHtb(configs) {
      */
     var __baseClass;
 
-    /**
+    var __parseFuncPath;
+
+  /**
      * Profile for this partner.
      *
      * @private {object}
@@ -203,9 +248,7 @@ function SovrnHtb(configs) {
      * callback type to CallbackTypes.CALLBACK_NAME and omit this function.
      */
     function adResponseCallback(adResponse) {
-        /* get callbackId from adResponse here */
-        var callbackId = 0;
-        __baseClass._adResponseStore[callbackId] = adResponse;
+        __baseClass._adResponseStore[adResponse.br.id] = adResponse;
     }
     /* -------------------------------------------------------------------------- */
 
@@ -411,6 +454,7 @@ function SovrnHtb(configs) {
     (function __constructor() {
         EventsService = SpaceCamp.services.EventsService;
         RenderService = SpaceCamp.services.RenderService;
+        ComplianceService = SpaceCamp.services.ComplianceService;
 
         /* =============================================================================
          * STEP 1  | Partner Configuration
@@ -461,7 +505,10 @@ function SovrnHtb(configs) {
         }
         //? }
 
-        __baseClass = Partner(__profile, configs, null, {
+      __parseFuncPath = SpaceCamp.NAMESPACE + '.' + __profile.namespace + '.sovrnResponse';
+
+
+      __baseClass = Partner(__profile, configs, null, {
             parseResponse: __parseResponse,
             generateRequestObj: __generateRequestObj,
             adResponseCallback: adResponseCallback
