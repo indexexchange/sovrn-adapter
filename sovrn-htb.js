@@ -311,10 +311,10 @@ function SovrnHtb(configs) {
         var bids = adResponse;
 
         /* --------------------------------------------------------------------------------- */
+        // for (var j = 0; j < returnParcels.length; j++) {
 
-        for (var j = 0; j < returnParcels.length; j++) {
-
-            var curReturnParcel = returnParcels[j];
+        returnParcels.forEach(curReturnParcel => {
+            // var curReturnParcel = returnParcels[j];
 
             var headerStatsInfo = {};
             var htSlotId = curReturnParcel.htSlot.getId();
@@ -333,7 +333,7 @@ function SovrnHtb(configs) {
                  */
 
                 /* ----------- Fill this out to find a matching bid for the current parcel ------------- */
-                if (curReturnParcel.xSlotRef.someCriteria === bids[i].someCriteria) {
+                if (curReturnParcel.xSlotRef.placementId === bids[i].impid) {
                     curBid = bids[i];
                     bids.splice(i, 1);
                     break;
@@ -346,7 +346,7 @@ function SovrnHtb(configs) {
                     __baseClass._emitStatsEvent(sessionId, 'hs_slot_pass', headerStatsInfo);
                 }
                 curReturnParcel.pass = true;
-                continue;
+                return;
             }
 
             /* ---------- Fill the bid variables with data from the bid response here. ------------*/
@@ -375,7 +375,7 @@ function SovrnHtb(configs) {
             * If firing a tracking pixel is not required or the pixel url is part of the adm,
             * leave empty;
             */
-            var pixelUrl = '';
+            var pixelUrl = curBid.nurl;
 
             /* ---------------------------------------------------------------------------------------*/
 
@@ -388,7 +388,7 @@ function SovrnHtb(configs) {
                     __baseClass._emitStatsEvent(sessionId, 'hs_slot_pass', headerStatsInfo);
                 }
                 curReturnParcel.pass = true;
-                continue;
+                return;
             }
 
             if (__profile.enabledAnalytics.requestTime) {
@@ -441,7 +441,7 @@ function SovrnHtb(configs) {
             //? if (FEATURES.INTERNAL_RENDER) {
             curReturnParcel.targeting.pubKitAdId = pubKitAdId;
             //? }
-        }
+        })
     }
 
     /* =====================================
