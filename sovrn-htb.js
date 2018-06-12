@@ -307,15 +307,22 @@ function SovrnHtb(configs) {
          */
 
         /* ---------- Process adResponse and extract the bids into the bids array ------------*/
+        var seatbid = adResponse.seatbid;
+        var bids
 
-        var bids = adResponse;
+        if(seatbid &&
+          seatbid.length > 0 &&
+          seatbid[0].bid &&
+          seatbid[0].bid.length > 0) {
+          bids = seatbid[0].bid;
+        } else {
+          bids = [];
+        }
 
         /* --------------------------------------------------------------------------------- */
-        // for (var j = 0; j < returnParcels.length; j++) {
+        for (var j = 0; j < returnParcels.length; j++) {
 
-        returnParcels.forEach(curReturnParcel => {
-            // var curReturnParcel = returnParcels[j];
-
+            var curReturnParcel = returnParcels[j];
             var headerStatsInfo = {};
             var htSlotId = curReturnParcel.htSlot.getId();
             headerStatsInfo[htSlotId] = {};
@@ -346,7 +353,7 @@ function SovrnHtb(configs) {
                     __baseClass._emitStatsEvent(sessionId, 'hs_slot_pass', headerStatsInfo);
                 }
                 curReturnParcel.pass = true;
-                return;
+                continue;
             }
 
             /* ---------- Fill the bid variables with data from the bid response here. ------------*/
@@ -363,7 +370,7 @@ function SovrnHtb(configs) {
             /* the creative/adm for the given slot that will be rendered if is the winner.
              * Please make sure the URL is decoded and ready to be document.written.
              */
-            var bidCreative = curBid.adm;
+            var bidCreative = decodeURIComponent(curBid.adm);
 
             /* the dealId if applicable for this slot. */
             var bidDealId = curBid.dealid;
@@ -388,7 +395,7 @@ function SovrnHtb(configs) {
                     __baseClass._emitStatsEvent(sessionId, 'hs_slot_pass', headerStatsInfo);
                 }
                 curReturnParcel.pass = true;
-                return;
+                continue;
             }
 
             if (__profile.enabledAnalytics.requestTime) {
@@ -441,7 +448,7 @@ function SovrnHtb(configs) {
             //? if (FEATURES.INTERNAL_RENDER) {
             curReturnParcel.targeting.pubKitAdId = pubKitAdId;
             //? }
-        })
+        }
     }
 
     /* =====================================
