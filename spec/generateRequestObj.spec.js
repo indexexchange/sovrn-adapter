@@ -44,12 +44,12 @@ function generateReturnParcels(profile, partnerConfig) {
                     htSlot: htSlot,
                     ref: "",
                     xSlotRef: partnerConfig.xSlots[xSlotName],
+                    xSlotName: xSlotName,
                     requestId: '_' + Date.now()
                 });
             }
         }
     }
-
     return returnParcels;
 }
 

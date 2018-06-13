@@ -1,5 +1,92 @@
 {
-    "bid": [],
-    "pass": [],
-    "deals": []
+    "bid": {
+        "id": "8134ce8c09affbf",
+        "seatbid": [
+            {
+                "bid": [
+                    {
+                        "id": "a_395433_9fca617f6ec2421fad98ac7000fb42f7",
+                        "impid": "54321",
+                        "price": 1.3440001010894775,
+                        "nurl": "http://vap3sfo1.lijit.com/rtb/impression?bannerid=59294&campaignid=2260&rtb_tid=22f57ae5-5217-4c82-8828-f876a3357e9c&rpid=36&zoneid=395433&cb=65014453&tid=a_395433_9fca617f6ec2421fad98ac7000fb42f7",
+                        "adm": "%3Ciframe%20src%3D%22http%3A%2F%2For-g2.gumgum.com%2Ffmarkup%2F6eb86d25-43e7-48dd-91e2-a1e2b9df71f2%2F1.68%22%20width%3D%22300%22%20height%3D%22250%22%20frameborder%3D%220%22%3E%3C%2Fiframe%3E%3Cscript%20type%3D'text%2Fjavascript'%3E%0Avar%20p%3Dlocation.protocol%2C%0Aurl%3D('https%3A'%3D%3D%3Dp%3Fp%3A'http%3A')%2B'%2F%2Fvap3sfo1.lijit.com%2Fres%2Fsovrn.containertag.new.min.js%3Fcid%3D3%26zid%3D395433%26v%3D4%26tid%3Da_395433_9fca617f6ec2421fad98ac7000fb42f7%26loc%3Dhttp%3A%2F%2Fthechive.com%2F'%2C%0Ascr%3Ddocument.createElement('script')%3B%0Ascr.id%3D'ct-a_395433_9fca617f6ec2421fad98ac7000fb42f7'%2C%0Ascr.src%3Durl%2Cscr.type%3D'application%2Fjavascript'%2Cscr.async%3D!1%3B%0Avar%20s0%3Ddocument.getElementsByTagName('script')%5B0%5D%3B%0As0.parentNode.insertBefore(scr%2Cs0)%3B%0A%3C%2Fscript%3E",
+                        "crid": "35-5725211",
+                        "w": 300,
+                        "h": 250
+                    },
+                    {
+                        "id": "a_395433_9fca617f6ec2421fad98ac7000fb42f7",
+                        "impid": "12345",
+                        "price": 1.3440001010894775,
+                        "nurl": "http://vap3sfo1.lijit.com/rtb/impression?bannerid=59294&campaignid=2260&rtb_tid=22f57ae5-5217-4c82-8828-f876a3357e9c&rpid=36&zoneid=395433&cb=65014453&tid=a_395433_9fca617f6ec2421fad98ac7000fb42f7",
+                        "adm": "%3Ciframe%20src%3D%22http%3A%2F%2For-g2.gumgum.com%2Ffmarkup%2F6eb86d25-43e7-48dd-91e2-a1e2b9df71f2%2F1.68%22%20width%3D%22300%22%20height%3D%22250%22%20frameborder%3D%220%22%3E%3C%2Fiframe%3E%3Cscript%20type%3D'text%2Fjavascript'%3E%0Avar%20p%3Dlocation.protocol%2C%0Aurl%3D('https%3A'%3D%3D%3Dp%3Fp%3A'http%3A')%2B'%2F%2Fvap3sfo1.lijit.com%2Fres%2Fsovrn.containertag.new.min.js%3Fcid%3D3%26zid%3D395433%26v%3D4%26tid%3Da_395433_9fca617f6ec2421fad98ac7000fb42f7%26loc%3Dhttp%3A%2F%2Fthechive.com%2F'%2C%0Ascr%3Ddocument.createElement('script')%3B%0Ascr.id%3D'ct-a_395433_9fca617f6ec2421fad98ac7000fb42f7'%2C%0Ascr.src%3Durl%2Cscr.type%3D'application%2Fjavascript'%2Cscr.async%3D!1%3B%0Avar%20s0%3Ddocument.getElementsByTagName('script')%5B0%5D%3B%0As0.parentNode.insertBefore(scr%2Cs0)%3B%0A%3C%2Fscript%3E",
+                        "crid": "35-5725211",
+                        "w": 300,
+                        "h": 250
+                    },
+                    {
+                        "id": "a_395433_9fca617f6ec2421fad98ac7000fb42f7",
+                        "impid": "654321",
+                        "price": 1.3440001010894775,
+                        "nurl": "http://vap3sfo1.lijit.com/rtb/impression?bannerid=59294&campaignid=2260&rtb_tid=22f57ae5-5217-4c82-8828-f876a3357e9c&rpid=36&zoneid=395433&cb=65014453&tid=a_395433_9fca617f6ec2421fad98ac7000fb42f7",
+                        "adm": "%3Ciframe%20src%3D%22http%3A%2F%2For-g2.gumgum.com%2Ffmarkup%2F6eb86d25-43e7-48dd-91e2-a1e2b9df71f2%2F1.68%22%20width%3D%22300%22%20height%3D%22250%22%20frameborder%3D%220%22%3E%3C%2Fiframe%3E%3Cscript%20type%3D'text%2Fjavascript'%3E%0Avar%20p%3Dlocation.protocol%2C%0Aurl%3D('https%3A'%3D%3D%3Dp%3Fp%3A'http%3A')%2B'%2F%2Fvap3sfo1.lijit.com%2Fres%2Fsovrn.containertag.new.min.js%3Fcid%3D3%26zid%3D395433%26v%3D4%26tid%3Da_395433_9fca617f6ec2421fad98ac7000fb42f7%26loc%3Dhttp%3A%2F%2Fthechive.com%2F'%2C%0Ascr%3Ddocument.createElement('script')%3B%0Ascr.id%3D'ct-a_395433_9fca617f6ec2421fad98ac7000fb42f7'%2C%0Ascr.src%3Durl%2Cscr.type%3D'application%2Fjavascript'%2Cscr.async%3D!1%3B%0Avar%20s0%3Ddocument.getElementsByTagName('script')%5B0%5D%3B%0As0.parentNode.insertBefore(scr%2Cs0)%3B%0A%3C%2Fscript%3E",
+                        "crid": "35-5725211",
+                        "w": 300,
+                        "h": 250
+                    }
+                ]
+            }
+        ]
+    },
+    "pass": {
+        "id": "8134ce8c09affbf",
+        "seatbid": [
+            {
+                "bid": [
+                ]
+            }
+        ]
+    },
+    "deals": {
+        "id": "8134ce8c09affbf",
+        "seatbid": [
+            {
+                "bid": [
+                    {
+                        "id": "a_395433_9fca617f6ec2421fad98ac7000fb42f7",
+                        "impid": "54321",
+                        "price": 1.3440001010894775,
+                        "nurl": "http://vap3sfo1.lijit.com/rtb/impression?bannerid=59294&campaignid=2260&rtb_tid=22f57ae5-5217-4c82-8828-f876a3357e9c&rpid=36&zoneid=395433&cb=65014453&tid=a_395433_9fca617f6ec2421fad98ac7000fb42f7",
+                        "adm": "%3Ciframe%20src%3D%22http%3A%2F%2For-g2.gumgum.com%2Ffmarkup%2F6eb86d25-43e7-48dd-91e2-a1e2b9df71f2%2F1.68%22%20width%3D%22300%22%20height%3D%22250%22%20frameborder%3D%220%22%3E%3C%2Fiframe%3E%3Cscript%20type%3D'text%2Fjavascript'%3E%0Avar%20p%3Dlocation.protocol%2C%0Aurl%3D('https%3A'%3D%3D%3Dp%3Fp%3A'http%3A')%2B'%2F%2Fvap3sfo1.lijit.com%2Fres%2Fsovrn.containertag.new.min.js%3Fcid%3D3%26zid%3D395433%26v%3D4%26tid%3Da_395433_9fca617f6ec2421fad98ac7000fb42f7%26loc%3Dhttp%3A%2F%2Fthechive.com%2F'%2C%0Ascr%3Ddocument.createElement('script')%3B%0Ascr.id%3D'ct-a_395433_9fca617f6ec2421fad98ac7000fb42f7'%2C%0Ascr.src%3Durl%2Cscr.type%3D'application%2Fjavascript'%2Cscr.async%3D!1%3B%0Avar%20s0%3Ddocument.getElementsByTagName('script')%5B0%5D%3B%0As0.parentNode.insertBefore(scr%2Cs0)%3B%0A%3C%2Fscript%3E",
+                        "dealid": "54321",
+                        "crid": "35-5725211",
+                        "w": 300,
+                        "h": 250
+                    },
+                    {
+                        "id": "a_395433_9fca617f6ec2421fad98ac7000fb42f7",
+                        "impid": "12345",
+                        "price": 1.3440001010894775,
+                        "nurl": "http://vap3sfo1.lijit.com/rtb/impression?bannerid=59294&campaignid=2260&rtb_tid=22f57ae5-5217-4c82-8828-f876a3357e9c&rpid=36&zoneid=395433&cb=65014453&tid=a_395433_9fca617f6ec2421fad98ac7000fb42f7",
+                        "adm": "%3Ciframe%20src%3D%22http%3A%2F%2For-g2.gumgum.com%2Ffmarkup%2F6eb86d25-43e7-48dd-91e2-a1e2b9df71f2%2F1.68%22%20width%3D%22300%22%20height%3D%22250%22%20frameborder%3D%220%22%3E%3C%2Fiframe%3E%3Cscript%20type%3D'text%2Fjavascript'%3E%0Avar%20p%3Dlocation.protocol%2C%0Aurl%3D('https%3A'%3D%3D%3Dp%3Fp%3A'http%3A')%2B'%2F%2Fvap3sfo1.lijit.com%2Fres%2Fsovrn.containertag.new.min.js%3Fcid%3D3%26zid%3D395433%26v%3D4%26tid%3Da_395433_9fca617f6ec2421fad98ac7000fb42f7%26loc%3Dhttp%3A%2F%2Fthechive.com%2F'%2C%0Ascr%3Ddocument.createElement('script')%3B%0Ascr.id%3D'ct-a_395433_9fca617f6ec2421fad98ac7000fb42f7'%2C%0Ascr.src%3Durl%2Cscr.type%3D'application%2Fjavascript'%2Cscr.async%3D!1%3B%0Avar%20s0%3Ddocument.getElementsByTagName('script')%5B0%5D%3B%0As0.parentNode.insertBefore(scr%2Cs0)%3B%0A%3C%2Fscript%3E",
+                        "dealid": "54321",
+                        "crid": "35-5725211",
+                        "w": 300,
+                        "h": 250
+                    },
+                    {
+                        "id": "a_395433_9fca617f6ec2421fad98ac7000fb42f7",
+                        "impid": "654321",
+                        "price": 1.3440001010894775,
+                        "nurl": "http://vap3sfo1.lijit.com/rtb/impression?bannerid=59294&campaignid=2260&rtb_tid=22f57ae5-5217-4c82-8828-f876a3357e9c&rpid=36&zoneid=395433&cb=65014453&tid=a_395433_9fca617f6ec2421fad98ac7000fb42f7",
+                        "adm": "%3Ciframe%20src%3D%22http%3A%2F%2For-g2.gumgum.com%2Ffmarkup%2F6eb86d25-43e7-48dd-91e2-a1e2b9df71f2%2F1.68%22%20width%3D%22300%22%20height%3D%22250%22%20frameborder%3D%220%22%3E%3C%2Fiframe%3E%3Cscript%20type%3D'text%2Fjavascript'%3E%0Avar%20p%3Dlocation.protocol%2C%0Aurl%3D('https%3A'%3D%3D%3Dp%3Fp%3A'http%3A')%2B'%2F%2Fvap3sfo1.lijit.com%2Fres%2Fsovrn.containertag.new.min.js%3Fcid%3D3%26zid%3D395433%26v%3D4%26tid%3Da_395433_9fca617f6ec2421fad98ac7000fb42f7%26loc%3Dhttp%3A%2F%2Fthechive.com%2F'%2C%0Ascr%3Ddocument.createElement('script')%3B%0Ascr.id%3D'ct-a_395433_9fca617f6ec2421fad98ac7000fb42f7'%2C%0Ascr.src%3Durl%2Cscr.type%3D'application%2Fjavascript'%2Cscr.async%3D!1%3B%0Avar%20s0%3Ddocument.getElementsByTagName('script')%5B0%5D%3B%0As0.parentNode.insertBefore(scr%2Cs0)%3B%0A%3C%2Fscript%3E",
+                        "dealid": "654321",
+                        "crid": "35-5725211",
+                        "w": 300,
+                        "h": 250
+                    }
+                ]
+            }
+        ]
+    }
 }

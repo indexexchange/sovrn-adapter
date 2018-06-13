@@ -27,6 +27,8 @@ var Network = require('network.js');
 var Utilities = require('utilities.js');
 var EventsService;
 var RenderService;
+var ComplianceService;
+
 
 //? if (DEBUG) {
 var ConfigValidators = require('config-validators.js');
@@ -49,6 +51,169 @@ function SovrnHtb(configs) {
      * Data
      * ---------------------------------- */
 
+  /**
+   * Generates the request URL and query data to the endpoint for the xSlots
+   * in the given returnParcels.
+   *
+   * @param  {object[]} returnParcels
+   *
+   * @return {object}
+   */
+  function __generateRequestObj(returnParcels) {
+
+    /* =============================================================================
+     * STEP 2  | Generate Request URL
+     * -----------------------------------------------------------------------------
+     *
+     * Generate the URL to request demand from the partner endpoint using the provided
+     * returnParcels. The returnParcels is an array of objects each object containing
+     * an .xSlotRef which is a reference to the xSlot object from the partner configuration.
+     * Use this to retrieve the placements/xSlots you need to request for.
+     *
+     * If your partner is MRA, returnParcels will be an array of length one. If your
+     * partner is SRA, it will contain any number of entities. In any event, the full
+     * contents of the array should be able to fit into a single request and the
+     * return value of this function should similarly represent a single request to the
+     * endpoint.
+     *
+     * Return an object containing:
+     * queryUrl: the url for the request
+     * data: the query object containing a map of the query string paramaters
+     *
+     * callbackId:
+     *
+     * arbitrary id to match the request with the response in the callback function. If
+     * your endpoint supports passing in an arbitrary ID and returning it as part of the response
+     * please use the callbackType: Partner.CallbackTypes.ID and fill out the adResponseCallback.
+     *
+     * adResponseCallback -> parse response in this
+     *
+     * Also please provide this adResponseCallback to your bid request here so that the JSONP
+     * response calls it once it has completed.
+     *
+     * If your endpoint does not support passing in an ID, simply use
+     * Partner.CallbackTypes.CALLBACK_NAME and the wrapper will take care of handling request
+     * matching by generating unique callbacks for each request using the callbackId.
+     *
+     * If your endpoint is ajax only, please set the appropriate values in your profile for this,
+     * i.e. Partner.CallbackTypes.NONE and Partner.Requesttypes.AJAX. You also do not need to provide
+     * a callbackId in this case because there is no callback.
+     *
+     * The return object should look something like this:
+     * {
+     *     url: 'http://bidserver.com/api/bids' // base request url for a GET/POST request
+     *     data: { // query string object that will be attached to the base url
+     *        slots: [
+     *             {
+     *                 placementId: 54321,
+     *                 sizes: [[300, 250]]
+     *             },{
+     *                 placementId: 12345,
+     *                 sizes: [[300, 600]]
+     *             },{
+     *                 placementId: 654321,
+     *                 sizes: [[728, 90]]
+     *             }
+     *         ],
+     *         site: 'http://google.com'
+     *     },
+     *     callbackId: '_23sd2ij4i1' //unique id used for pairing requests and responses
+     * }
+     */
+
+    /* ---------------------- PUT CODE HERE ------------------------------------ */
+    var callbackId = System.generateUniqueId();
+
+    /* Change this to your bidder endpoint.*/
+    var baseUrl = Browser.getProtocol() + '//ap.lijit.com/rtb/bid';
+
+
+
+    /* ---------------- Craft bid request using the above returnParcels --------- */
+
+    // queryObj: {
+    //   callback: headertag.SovrnHtb.sovrnResponse,
+    //   src: indexAdapter,
+    //   br: {
+    //     "id": "8134ce8c09affbf",
+    //         "imp": [
+    //       {
+    //         "id": "58893ab15f05ef1",
+    //         "banner": {
+    //           "w": 970,
+    //           "h": 66
+    //         },
+    //         "tagid": "395468",
+    //         "bidfloor": ""
+    //       }
+    //     ],
+    //         "site": {
+    //       "domain": "thechive.com",
+    //           "page": "/"
+    //     }
+    //   }
+    // }
+
+
+    var source = "indexAdapter"
+    var callbackFunc = __parseFuncPath
+    var queryObj = {
+      callback: callbackFunc,
+      src: source,
+    }
+
+    var br = {
+      id: callbackId,
+      site: {
+        domain: Browser.getReferrer,
+        page: Browser.getPageUrl()
+      }
+    };
+
+    const imps = returnParcels.map(parcel => {
+      const tagId = parcel.xSlotRef.placementId;
+      const refId = parcel.ref;
+        const w = 1;
+        const h = 1;
+        return {
+          id: refId,
+          banner: {
+            w: w,
+            h: h
+          },
+          tagid: tagId,
+          bidfloor: ""
+        }
+    })
+
+    br.imps = imps;
+
+    queryObj.br = br;
+
+    if(ComplianceService.isPrivacyEnabled()) {
+      var gdprStatus = ComplianceService.gdpr.getConsent();
+
+      br.regs = {
+        ext: {
+          gdpr: gdprStatus.applies ? 1 : 0
+        }
+      }
+      br.user = {
+        ext: {
+          constent: gdprStatus.consentString
+        }
+      }
+    }
+
+    /* -------------------------------------------------------------------------- */
+
+    return {
+      url: baseUrl,
+      data: queryObj,
+      callbackId: callbackId
+    };
+  }
+
     /* Private
      * ---------------------------------- */
 
@@ -59,7 +224,9 @@ function SovrnHtb(configs) {
      */
     var __baseClass;
 
-    /**
+    var __parseFuncPath;
+
+  /**
      * Profile for this partner.
      *
      * @private {object}
@@ -73,92 +240,6 @@ function SovrnHtb(configs) {
     /* Utilities
      * ---------------------------------- */
 
-    /**
-     * Generates the request URL and query data to the endpoint for the xSlots
-     * in the given returnParcels.
-     *
-     * @param  {object[]} returnParcels
-     *
-     * @return {object}
-     */
-    function __generateRequestObj(returnParcels) {
-
-        /* =============================================================================
-         * STEP 2  | Generate Request URL
-         * -----------------------------------------------------------------------------
-         *
-         * Generate the URL to request demand from the partner endpoint using the provided
-         * returnParcels. The returnParcels is an array of objects each object containing
-         * an .xSlotRef which is a reference to the xSlot object from the partner configuration.
-         * Use this to retrieve the placements/xSlots you need to request for.
-         *
-         * If your partner is MRA, returnParcels will be an array of length one. If your
-         * partner is SRA, it will contain any number of entities. In any event, the full
-         * contents of the array should be able to fit into a single request and the
-         * return value of this function should similarly represent a single request to the
-         * endpoint.
-         *
-         * Return an object containing:
-         * queryUrl: the url for the request
-         * data: the query object containing a map of the query string paramaters
-         *
-         * callbackId:
-         *
-         * arbitrary id to match the request with the response in the callback function. If
-         * your endpoint supports passing in an arbitrary ID and returning it as part of the response
-         * please use the callbackType: Partner.CallbackTypes.ID and fill out the adResponseCallback.
-         * Also please provide this adResponseCallback to your bid request here so that the JSONP
-         * response calls it once it has completed.
-         *
-         * If your endpoint does not support passing in an ID, simply use
-         * Partner.CallbackTypes.CALLBACK_NAME and the wrapper will take care of handling request
-         * matching by generating unique callbacks for each request using the callbackId.
-         *
-         * If your endpoint is ajax only, please set the appropriate values in your profile for this,
-         * i.e. Partner.CallbackTypes.NONE and Partner.Requesttypes.AJAX. You also do not need to provide
-         * a callbackId in this case because there is no callback.
-         *
-         * The return object should look something like this:
-         * {
-         *     url: 'http://bidserver.com/api/bids' // base request url for a GET/POST request
-         *     data: { // query string object that will be attached to the base url
-         *        slots: [
-         *             {
-         *                 placementId: 54321,
-         *                 sizes: [[300, 250]]
-         *             },{
-         *                 placementId: 12345,
-         *                 sizes: [[300, 600]]
-         *             },{
-         *                 placementId: 654321,
-         *                 sizes: [[728, 90]]
-         *             }
-         *         ],
-         *         site: 'http://google.com'
-         *     },
-         *     callbackId: '_23sd2ij4i1' //unique id used for pairing requests and responses
-         * }
-         */
-
-        /* ---------------------- PUT CODE HERE ------------------------------------ */
-        var queryObj = {};
-        var callbackId = System.generateUniqueId();
-
-        /* Change this to your bidder endpoint.*/
-        var baseUrl = Browser.getProtocol() + '//someAdapterEndpoint.com/bid';
-
-        /* ---------------- Craft bid request using the above returnParcels --------- */
-
-
-        /* -------------------------------------------------------------------------- */
-
-        return {
-            url: baseUrl,
-            data: queryObj,
-            callbackId: callbackId
-        };
-    }
-
     /* =============================================================================
      * STEP 3  | Response callback
      * -----------------------------------------------------------------------------
@@ -171,9 +252,7 @@ function SovrnHtb(configs) {
      * callback type to CallbackTypes.CALLBACK_NAME and omit this function.
      */
     function adResponseCallback(adResponse) {
-        /* get callbackId from adResponse here */
-        var callbackId = 0;
-        __baseClass._adResponseStore[callbackId] = adResponse;
+        __baseClass._adResponseStore[adResponse.br.id] = adResponse;
     }
     /* -------------------------------------------------------------------------- */
 
@@ -235,15 +314,22 @@ function SovrnHtb(configs) {
          */
 
         /* ---------- Process adResponse and extract the bids into the bids array ------------*/
+        var seatbid = adResponse.seatbid;
+        var bids
 
-        var bids = adResponse;
+        if(seatbid &&
+          seatbid.length > 0 &&
+          seatbid[0].bid &&
+          seatbid[0].bid.length > 0) {
+          bids = seatbid[0].bid;
+        } else {
+          bids = [];
+        }
 
         /* --------------------------------------------------------------------------------- */
-
         for (var j = 0; j < returnParcels.length; j++) {
 
             var curReturnParcel = returnParcels[j];
-
             var headerStatsInfo = {};
             var htSlotId = curReturnParcel.htSlot.getId();
             headerStatsInfo[htSlotId] = {};
@@ -261,7 +347,7 @@ function SovrnHtb(configs) {
                  */
 
                 /* ----------- Fill this out to find a matching bid for the current parcel ------------- */
-                if (curReturnParcel.xSlotRef.someCriteria === bids[i].someCriteria) {
+                if (curReturnParcel.xSlotRef.placementId === bids[i].impid) {
                     curBid = bids[i];
                     bids.splice(i, 1);
                     break;
@@ -291,7 +377,7 @@ function SovrnHtb(configs) {
             /* the creative/adm for the given slot that will be rendered if is the winner.
              * Please make sure the URL is decoded and ready to be document.written.
              */
-            var bidCreative = curBid.adm;
+            var bidCreative = decodeURIComponent(curBid.adm);
 
             /* the dealId if applicable for this slot. */
             var bidDealId = curBid.dealid;
@@ -303,7 +389,7 @@ function SovrnHtb(configs) {
             * If firing a tracking pixel is not required or the pixel url is part of the adm,
             * leave empty;
             */
-            var pixelUrl = '';
+            var pixelUrl = curBid.nurl;
 
             /* ---------------------------------------------------------------------------------------*/
 
@@ -379,6 +465,7 @@ function SovrnHtb(configs) {
     (function __constructor() {
         EventsService = SpaceCamp.services.EventsService;
         RenderService = SpaceCamp.services.RenderService;
+        ComplianceService = SpaceCamp.services.ComplianceService;
 
         /* =============================================================================
          * STEP 1  | Partner Configuration
@@ -429,7 +516,10 @@ function SovrnHtb(configs) {
         }
         //? }
 
-        __baseClass = Partner(__profile, configs, null, {
+      __parseFuncPath = SpaceCamp.NAMESPACE + '.' + __profile.namespace + '.sovrnResponse';
+
+
+      __baseClass = Partner(__profile, configs, null, {
             parseResponse: __parseResponse,
             generateRequestObj: __generateRequestObj,
             adResponseCallback: adResponseCallback
