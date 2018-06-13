@@ -6,6 +6,11 @@
  *  window namespace here, but this is discouraged if it's not strictly needed.
  */
 
+if (__directInterface.Layers.PartnersLayer.Partners.SovrnHtb) {
+  shellInterface.SovrnHtb = shellInterface.SovrnHtb || {};
+  shellInterface.SovrnHtb.adResponseCallback = __directInterface.Layers.PartnersLayer.Partners.SovrnHtb.adResponseCallback;
+}
+
 //? if (FEATURES.GPT_LINE_ITEMS) {
 shellInterface.SovrnHtb = {
     render: SpaceCamp.services.RenderService.renderDfpAd.bind(null, 'SovrnHtb')
