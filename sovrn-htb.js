@@ -28,6 +28,7 @@ var Network = require('network.js');
 var Utilities = require('utilities.js');
 var EventsService;
 var RenderService;
+var ComplianceService;
 
 //? if (DEBUG) {
 var ConfigValidators = require('config-validators.js');
@@ -124,6 +125,25 @@ function SovrnHtb(configs) {
             },
             imp: imps
         };
+
+        if(ComplianceService.isPrivacyEnabled()) {
+            var gdprStatus = ComplianceService.gdpr.getConsent();
+            if(gdprStatus.applies !== null) {
+                br.regs = {
+                    ext: {
+                        gdpr: gdprStatus.applies ? 1 : 0
+                    }
+                }
+            }
+
+            if(gdprStatus.consentString !== null && gdprStatus.consentString !== "") {
+                br.user = {
+                    ext: {
+                        consent: gdprStatus.consentString
+                    }
+                }
+            }
+        }
 
         return {
             callbackId: requestId,
@@ -273,6 +293,7 @@ function SovrnHtb(configs) {
      * ---------------------------------- */
 
     (function __constructor() {
+        ComplianceService = SpaceCamp.services.ComplianceService;
         EventsService = SpaceCamp.services.EventsService;
         RenderService = SpaceCamp.services.RenderService;
 
