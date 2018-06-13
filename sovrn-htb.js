@@ -173,9 +173,8 @@ function SovrnHtb(configs) {
     const imps = returnParcels.map(parcel => {
       const tagId = parcel.xSlotRef.placementId;
       const refId = parcel.ref;
-      return parcel.xSlotRef.sizes.map(size => {
-        const w = size[0];
-        const h = size[1];
+        const w = 1;
+        const h = 1;
         return {
           id: refId,
           banner: {
@@ -185,8 +184,7 @@ function SovrnHtb(configs) {
           tagid: tagId,
           bidfloor: ""
         }
-      })
-    }).reduce((prev, curr) => { return prev.concat(curr); });
+    })
 
     br.imps = imps;
 
@@ -194,8 +192,17 @@ function SovrnHtb(configs) {
 
     if(ComplianceService.isPrivacyEnabled()) {
       var gdprStatus = ComplianceService.gdpr.getConsent();
-      queryObj.gdpr = gdprStatus.applies ? 1 : 0;
-      queryObj.gdpr_consent = gdprStatus.consentString;
+
+      br.regs = {
+        ext: {
+          gdpr: gdprStatus.applies ? 1 : 0
+        }
+      }
+      br.user = {
+        ext: {
+          constent: gdprStatus.consentString
+        }
+      }
     }
 
     /* -------------------------------------------------------------------------- */
