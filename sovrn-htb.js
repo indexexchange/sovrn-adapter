@@ -26,6 +26,7 @@ var SpaceCamp = require('space-camp.js');
 var System = require('system.js');
 var Network = require('network.js');
 var Utilities = require('utilities.js');
+var { version } = require('./package.json');
 var EventsService;
 var RenderService;
 var ComplianceService;
@@ -152,7 +153,8 @@ function SovrnHtb(configs) {
                 contentType: false,
                 data: {
                     callback: 'window.' + SpaceCamp.NAMESPACE + '.' + __profile.namespace + '.adResponseCallback',
-                    br: JSON.stringify(br)
+                    br: JSON.stringify(br),
+                    src: `ix_${version}`
                 }
             }
         };
