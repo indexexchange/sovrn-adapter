@@ -152,7 +152,8 @@ function SovrnHtb(configs) {
                 contentType: false,
                 data: {
                     callback: 'window.' + SpaceCamp.NAMESPACE + '.' + __profile.namespace + '.adResponseCallback',
-                    br: JSON.stringify(br)
+                    br: JSON.stringify(br),
+                    src: 'ix_' + __profile.version
                 }
             }
         };
@@ -247,6 +248,9 @@ function SovrnHtb(configs) {
 
             curReturnParcel.targeting[__baseClass._configs.targetingKeys.om] = [sizeKey + '_' + targetingCpm];
             curReturnParcel.targeting[__baseClass._configs.targetingKeys.id] = [curReturnParcel.requestId];
+            if(bid.dealid) {
+                curReturnParcel.targeting[__baseClass._configs.targetingKeys.pmid] = bid.dealId;
+            }
             //? }
 
             ////? if(FEATURES.RETURN_CREATIVE) {
@@ -318,7 +322,8 @@ function SovrnHtb(configs) {
             },
             targetingKeys: {
                 om: 'ix_sovrn_om',
-                id: 'ix_sovrn_id'
+                id: 'ix_sovrn_id',
+                pmid: 'ix_sovrn_pmid'
             },
             bidUnitInCents: 100,
             lineItemType: Constants.LineItemTypes.ID_AND_SIZE,
